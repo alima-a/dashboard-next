@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Box,
   Toolbar,
@@ -24,6 +24,12 @@ export type NavItem = {
 /** Vertical navigation list inside Drawer paper */
 export default function SideNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const logout = async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    router.replace('/auth/login');
+  };
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -51,7 +57,7 @@ export default function SideNav({ onNavigate }: { onNavigate?: () => void }) {
       <Box sx={{ flexGrow: 1 }} />
 
       <List>
-        <ListItemButton onClick={() => console.log('logout')}>
+        <ListItemButton onClick={logout}>
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
