@@ -10,7 +10,6 @@ export interface DelistedMobileCardsProps {
   startIndex?: number;
 }
 
-/** Mobile-friendly list of delisted companies as cards */
 export default function DelistedCompaniesMobileCards({
   items,
   startIndex = 0,
