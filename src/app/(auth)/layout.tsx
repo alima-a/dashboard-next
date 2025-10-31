@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
 import Providers from '@/src/app/providers';
-import Layout from '@/src/app/components/Layout/Layout';
+import React, { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: 'My App',
+  title: 'Alima App',
 };
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  return <Providers>{children}</Providers>;
+  return (
+    <Suspense fallback={<div style={{ padding: 24 }}>Loading…</div>}>
+      <Providers>{children}</Providers>
+    </Suspense>
+  );
 }
