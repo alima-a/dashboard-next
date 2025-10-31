@@ -1,28 +1,46 @@
-import StockChartCard from '@/src/app/components/Dashboard/StockChartCard';
-import { Grid, Box, Paper, Skeleton, Typography } from '@mui/material';
-import PeersTableCard from '@/src/app/components/Dashboard/PeersTableCard';
+import HistoricalMarketCapBlock from '@/src/app/components/Dashboard/HistoricalMarketCap/HistoricalMarketCapBlock';
+import { Grid, Box, Typography } from '@mui/material';
+import DelistedCompaniesCard from '@/src/app/components/Dashboard/DelistedCompanies/DelistedCompaniesBlock';
+import { MarketCapPoint, Ticker } from '@/src/app/types/fmp';
+import { getDelisted, getMarketCaps } from '@/src/app/lib/fmp';
+import ReduxProvider from '@/src/app/providers/ReduxProvider';
+
+export const revalidate = 600;
+
+const DEFAULT_TICKERS: Ticker[] = ['AAPL', 'TSLA', 'AMZN'];
 
 export default async function DashboardPage() {
-  // const data = await getItems();
-  return (
-    <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
-      <Typography variant="h5">Dashboard</Typography>
-      <Grid container spacing={3}>
-        <Grid size={12}>
-          <StockChartCard defaultSymbol="AAPL" defaultDays={60} title="Market snapshot" />
-        </Grid>
+  const [marketCaps, delisted] = await Promise.all([
+    getMarketCaps(DEFAULT_TICKERS, 3600),
+    getDelisted(0, 100, 1800), // берём максимум 100 для клиентской пагинации
+  ]);
 
-        <Grid size={12}>
-          <PeersTableCard title="Stock Peer Comparison" />
-          {/*<Paper sx={{ p: 2 }}>*/}
-          {/*  <Skeleton variant="text" width="30%" height={28} sx={{ mb: 1 }} />*/}
-          {/*  <Skeleton variant="rectangular" height={56} sx={{ mb: 1 }} />*/}
-          {/*  <Skeleton variant="rectangular" height={56} sx={{ mb: 1 }} />*/}
-          {/*  <Skeleton variant="rectangular" height={56} sx={{ mb: 1 }} />*/}
-          {/*  <Skeleton variant="rectangular" height={56} />*/}
-          {/*</Paper>*/}
+  const preloadedState = {
+    marketCaps: {
+      itemsBySymbol: marketCaps as Record<Ticker, MarketCapPoint[]>,
+      status: 'succeeded' as const,
+    },
+    delisted: { items: delisted, status: 'succeeded' as const },
+  };
+
+  return (
+    <ReduxProvider preloadedState={preloadedState}>
+      <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
+        <Typography variant="h5">Dashboard</Typography>
+        <Grid container spacing={3}>
+          <Grid size={12}>
+            <HistoricalMarketCapBlock
+              defaultSymbol="AAPL"
+              defaultDays={60}
+              title="Historical market capitalozatin"
+            />
+          </Grid>
+
+          <Grid size={12}>
+            <DelistedCompaniesCard title="Delisted companies" />
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </ReduxProvider>
   );
 }

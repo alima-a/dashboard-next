@@ -47,6 +47,7 @@ export default function LoginPage() {
           maxWidth: 400,
           p: isMobile ? 3 : 4,
           boxShadow: isMobile ? 'none' : undefined,
+          borderRadius: 2,
         }}
       >
         <Typography

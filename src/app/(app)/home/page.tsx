@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <Box
       sx={{
-        mt: isMobile ? 6 :20,
+        mt: isMobile ? 6 : 20,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
