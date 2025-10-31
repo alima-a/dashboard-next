@@ -3,17 +3,17 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import {
-  Chart as ChartJS,
-  LineElement,
   CategoryScale,
-  LinearScale,
-  Tooltip,
-  PointElement,
+  Chart as ChartJS,
+  Decimation,
   Filler,
   Legend,
-  Decimation,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Tooltip,
 } from 'chart.js';
-import { useTheme, useMediaQuery } from '@mui/material';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 ChartJS.register(
   LineElement,
@@ -65,8 +65,8 @@ const HistoricalMarketCapChart: React.FC<StockChartProps> = ({
     if (!data?.length) return [];
     // sort by date asc; cheap check to avoid resorting if already asc
     const asc = data.every((v, i, a) => i === 0 || a[i - 1].date <= v.date);
-    const arr = asc ? data : [...data].sort((a, b) => (a.date < b.date ? -1 : 1));
-    return arr;
+
+    return asc ? data : [...data].sort((a, b) => (a.date < b.date ? -1 : 1));
   }, [data]);
 
   const labels = React.useMemo(

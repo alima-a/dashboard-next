@@ -46,11 +46,6 @@ export const HistoricalMarketCapBlock: React.FC<StockChartCardProps> = ({
     return series.slice(-days);
   }, [data, symbol, days]);
 
-  const handleSymbol = (e: SelectChangeEvent<string>) => setSymbol(e.target.value as Ticker);
-  const handleDays = (_: React.MouseEvent<HTMLElement>, val: 7 | 30 | 60 | null) => {
-    if (val) setDays(val);
-  };
-
   return (
     <Box>
       <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ mb: 1.5, fontWeight: 600 }}>
